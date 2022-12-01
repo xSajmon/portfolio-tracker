@@ -1,5 +1,7 @@
 package com.simon.portfoliotracker.auth;
 
+import com.simon.portfoliotracker.wallet.Wallet;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,8 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class ApplicationUser implements UserDetails {
 
@@ -26,11 +27,14 @@ public class ApplicationUser implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Wallet wallet;
 
     public ApplicationUser(String username, String password, UserRole role) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.wallet = new Wallet();
     }
 
     @Override
