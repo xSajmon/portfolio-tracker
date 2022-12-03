@@ -1,5 +1,7 @@
 package com.simon.portfoliotracker.token;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.simon.portfoliotracker.ownedToken.OwnedToken;
 import com.simon.portfoliotracker.transaction.Transaction;
 import com.simon.portfoliotracker.wallet.Wallet;
@@ -15,10 +17,10 @@ public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
     private String name;
     private String symbol;
-    private Double currentPrice;
 
     @OneToOne(mappedBy = "token")
     private OwnedToken ownedToken;
@@ -26,9 +28,8 @@ public class Token {
     @OneToOne(mappedBy = "token")
     private Transaction transaction;
 
-    public Token(String name, String symbol, Double currentPrice) {
+    public Token(String name, String symbol) {
         this.name = name;
         this.symbol = symbol;
-        this.currentPrice = currentPrice;
     }
 }
