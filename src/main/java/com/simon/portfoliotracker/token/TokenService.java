@@ -1,10 +1,7 @@
 package com.simon.portfoliotracker.token;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import org.apache.tomcat.util.json.JSONParser;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.simon.portfoliotracker.token.api.MultiTokenInfo;
+import com.simon.portfoliotracker.token.api.SingleTokenInfo;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
@@ -13,16 +10,18 @@ import reactor.netty.http.client.HttpClient;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
+    public static final String BASE_URL = "api.coincap.io/v2";
     private TokenRepository tokenRepository;
     private final WebClient webClient;
 
     public TokenService(TokenRepository tokenRepository, WebClient.Builder builder) {
         this.tokenRepository = tokenRepository;
-        webClient = builder.baseUrl("api.coincap.io/v2")
+        webClient = builder.baseUrl(BASE_URL)
                 .clientConnector(new ReactorClientHttpConnector(
                         HttpClient.create().followRedirect(true)
                 ))
@@ -35,9 +34,13 @@ public class TokenService {
                 .accept(MediaType.APPLICATION_JSON)
                 .acceptCharset(StandardCharsets.UTF_8)
                 .retrieve()
-                .bodyToMono(ApiTokenInfo.class)
+                .bodyToMono(MultiTokenInfo.class)
                 .block()
                 .getData();
+    }
+
+    public Token findById(Long id){
+        return tokenRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Token with id "+ id +" not found"));
     }
 
 
@@ -47,5 +50,14 @@ public class TokenService {
                             .stream().map(Token::getName).collect(Collectors.toList())
                             .contains(token.getName())))
                     .collect(Collectors.toList()));
+    }
+
+    public Double getCurrentPrice(Token token){
+        return webClient.get()
+                .uri("/assets/" + token.getName().toLowerCase())
+                .retrieve()
+                .bodyToMono(SingleTokenInfo.class)
+                .block()
+                .getData().getCurrentPrice();
     }
 }

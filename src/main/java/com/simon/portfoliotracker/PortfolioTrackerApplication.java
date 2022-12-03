@@ -46,6 +46,8 @@ public class PortfolioTrackerApplication {
             transactionRepository.save(transaction);
             ownedTokenRepository.save(new OwnedToken(transaction.getWallet(), transaction.getToken(), transaction.getAmount()));
             tokenService.fillDatabase();
+            Token testToken = tokenService.findById(2L);
+            System.out.println(testToken.getName() + ": " + tokenService.getCurrentPrice(testToken));
         };
     }
 }

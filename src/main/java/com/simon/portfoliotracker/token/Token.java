@@ -2,6 +2,7 @@ package com.simon.portfoliotracker.token;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.simon.portfoliotracker.ownedToken.OwnedToken;
 import com.simon.portfoliotracker.transaction.Transaction;
 import com.simon.portfoliotracker.wallet.Wallet;
@@ -27,6 +28,11 @@ public class Token {
 
     @OneToOne(mappedBy = "token")
     private Transaction transaction;
+
+
+    @JsonProperty("priceUsd")
+    @Transient
+    private Double currentPrice;
 
     public Token(String name, String symbol) {
         this.name = name;
