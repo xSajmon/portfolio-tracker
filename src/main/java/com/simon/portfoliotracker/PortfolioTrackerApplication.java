@@ -32,6 +32,7 @@ public class PortfolioTrackerApplication {
     }
 
 
+
     @Bean
     public CommandLineRunner loadData(UserRepository userRepository,
                                       TransactionRepository transactionRepository,
@@ -47,7 +48,6 @@ public class PortfolioTrackerApplication {
             ownedTokenRepository.save(new OwnedToken(transaction.getWallet(), transaction.getToken(), transaction.getAmount()));
             tokenService.fillDatabase();
             Token testToken = tokenService.findById(2L);
-            System.out.println(testToken.getName() + ": " + tokenService.getCurrentPrice(testToken));
         };
     }
 }

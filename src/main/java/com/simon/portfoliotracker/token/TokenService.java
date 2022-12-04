@@ -2,6 +2,8 @@ package com.simon.portfoliotracker.token;
 
 import com.simon.portfoliotracker.token.api.MultiTokenInfo;
 import com.simon.portfoliotracker.token.api.SingleTokenInfo;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class TokenService {
     public static final String BASE_URL = "api.coincap.io/v2";
     private TokenRepository tokenRepository;
+    private ModelMapper modelMapper = new ModelMapper();
     private final WebClient webClient;
 
     public TokenService(TokenRepository tokenRepository, WebClient.Builder builder) {
@@ -43,6 +46,13 @@ public class TokenService {
         return tokenRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Token with id "+ id +" not found"));
     }
 
+    public List<Token> getRepoTokens(){
+        return tokenRepository.findAll();
+    }
+
+    public TokenDto mapToDto(Token token){
+        return modelMapper.map(token, TokenDto.class);
+    }
 
     public void fillDatabase(){
             tokenRepository.saveAll(getTokens().stream()

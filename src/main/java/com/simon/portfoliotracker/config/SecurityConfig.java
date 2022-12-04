@@ -19,10 +19,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+             http
                 .csrf().disable()
                 .userDetailsService(appUserService)
                 .authorizeRequests()
+                .antMatchers("/tokens").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll();
