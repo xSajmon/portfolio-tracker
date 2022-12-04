@@ -46,12 +46,18 @@ public class TokenService {
         return tokenRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Token with id "+ id +" not found"));
     }
 
+    public Token findByName(String name){
+        return tokenRepository.findByName(name).orElseThrow(() -> new NoSuchElementException("Token with name " + name + " not found"));
+    }
+
     public List<Token> getRepoTokens(){
         return tokenRepository.findAll();
     }
 
     public TokenDto mapToDto(Token token){
-        return modelMapper.map(token, TokenDto.class);
+        TokenDto tokenDto = modelMapper.map(token, TokenDto.class);
+        tokenDto.setPrice(getCurrentPrice(token));
+        return tokenDto;
     }
 
     public void fillDatabase(){
@@ -64,7 +70,7 @@ public class TokenService {
 
     public Double getCurrentPrice(Token token){
         return webClient.get()
-                .uri("/assets/" + token.getName().toLowerCase())
+                .uri("/assets/" + token.getUrlName())
                 .retrieve()
                 .bodyToMono(SingleTokenInfo.class)
                 .block()

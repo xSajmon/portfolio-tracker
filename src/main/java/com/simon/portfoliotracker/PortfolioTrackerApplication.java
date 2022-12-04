@@ -41,13 +41,11 @@ public class PortfolioTrackerApplication {
         return args -> {
             userRepository.save(new ApplicationUser("Szymon", "$2a$12$WXxGhMPgxFSerYq/bTnCd.ywLvW226kP6bhxDeLrApLTMwgHW7Czq", UserRole.ADMIN));
             userRepository.save(new ApplicationUser("Iza", "$2a$12$WXxGhMPgxFSerYq/bTnCd.ywLvW226kP6bhxDeLrApLTMwgHW7Czq", UserRole.USER));
-            ApplicationUser user = userRepository.findApplicationUserByUsername("Szymon").get();
-            transactionRepository.save(new Transaction(user.getWallet(), null, 200d));
-            Transaction transaction = new Transaction(user.getWallet(), new Token("Bitcoin", "BTC"), 100d);
-            transactionRepository.save(transaction);
-            ownedTokenRepository.save(new OwnedToken(transaction.getWallet(), transaction.getToken(), transaction.getAmount()));
+
             tokenService.fillDatabase();
-            Token testToken = tokenService.findById(2L);
+//            tokenService.getRepoTokens().stream().forEach(System.out::println);
+            System.out.println(tokenService.findByName("Bitcoin"));
+            System.out.println(tokenService.getCurrentPrice(tokenService.findByName("Bitcoin")));
         };
     }
 }

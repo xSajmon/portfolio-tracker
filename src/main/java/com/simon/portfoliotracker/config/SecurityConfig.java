@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .userDetailsService(appUserService)
                 .authorizeRequests()
-                .antMatchers("/tokens").permitAll()
+                .antMatchers("/tokens/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll();

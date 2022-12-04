@@ -22,6 +22,8 @@ public class Token {
     private Long id;
     private String name;
     private String symbol;
+    @JsonProperty("id")
+    private String urlName;
 
     @OneToOne(mappedBy = "token")
     private OwnedToken ownedToken;

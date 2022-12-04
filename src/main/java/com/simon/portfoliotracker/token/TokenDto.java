@@ -8,4 +8,5 @@ import lombok.Setter;
 public class TokenDto {
     private String name;
     private String symbol;
+    private Double price;
 }
