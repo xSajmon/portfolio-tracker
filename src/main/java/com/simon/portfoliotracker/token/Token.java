@@ -10,6 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 
 @Entity
 @Data
@@ -39,5 +42,14 @@ public class Token {
     public Token(String name, String symbol) {
         this.name = name;
         this.symbol = symbol;
+    }
+
+    public Double getCurrentPrice() {
+        if (currentPrice != null) {
+            currentPrice = new BigDecimal(Double.toString(currentPrice))
+                    .setScale(3, RoundingMode.HALF_UP)
+                    .doubleValue();
+        }
+        return currentPrice;
     }
 }

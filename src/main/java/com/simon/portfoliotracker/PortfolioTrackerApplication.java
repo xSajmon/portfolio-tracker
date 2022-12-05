@@ -31,8 +31,6 @@ public class PortfolioTrackerApplication {
         SpringApplication.run(PortfolioTrackerApplication.class, args);
     }
 
-
-
     @Bean
     public CommandLineRunner loadData(UserRepository userRepository,
                                       TransactionRepository transactionRepository,
