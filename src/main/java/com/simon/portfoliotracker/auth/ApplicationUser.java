@@ -1,5 +1,6 @@
 package com.simon.portfoliotracker.auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.simon.portfoliotracker.wallet.Wallet;
 import lombok.Data;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class ApplicationUser implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JsonIgnore
     private Wallet wallet;
 
     public ApplicationUser(String username, String password, UserRole role) {
