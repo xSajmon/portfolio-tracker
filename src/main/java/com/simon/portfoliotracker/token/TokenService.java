@@ -76,4 +76,8 @@ public class TokenService {
                 .block()
                 .getData().getCurrentPrice();
     }
+
+    public List<String> getTokensByName() {
+        return getRepoTokens().stream().map(Token::getName).collect(Collectors.toList());
+    }
 }

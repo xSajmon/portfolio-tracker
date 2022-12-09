@@ -1,8 +1,7 @@
 package com.simon.portfoliotracker.wallet;
 
-import com.simon.portfoliotracker.auth.ApplicationUser;
+import com.simon.portfoliotracker.auth.user.ApplicationUser;
 import com.simon.portfoliotracker.ownedToken.OwnedToken;
-import com.simon.portfoliotracker.token.Token;
 import com.simon.portfoliotracker.transaction.Transaction;
 import lombok.Data;
 

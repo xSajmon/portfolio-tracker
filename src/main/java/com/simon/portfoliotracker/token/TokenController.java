@@ -34,5 +34,10 @@ public class TokenController {
         return ResponseEntity.ok(tokenService.mapToDto(tokenService.findByName(name)));
     }
 
+    @GetMapping("/tokens/all/names")
+    public ResponseEntity<List<String>> getTokenNames(){
+        return ResponseEntity.ok(tokenService.getTokensByName());
+    }
+
 
 }

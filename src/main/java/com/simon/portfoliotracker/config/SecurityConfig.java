@@ -1,6 +1,6 @@
 package com.simon.portfoliotracker.config;
 
-import com.simon.portfoliotracker.auth.AppUserService;
+import com.simon.portfoliotracker.auth.user.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
