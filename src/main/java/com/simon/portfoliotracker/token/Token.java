@@ -7,7 +7,9 @@ import com.simon.portfoliotracker.ownedToken.OwnedToken;
 import com.simon.portfoliotracker.transaction.Transaction;
 import com.simon.portfoliotracker.wallet.Wallet;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,7 +17,8 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Token {
 
@@ -28,9 +31,12 @@ public class Token {
     @JsonProperty("id")
     private String urlName;
 
+
+    @JsonIgnore
     @OneToOne(mappedBy = "token")
     private OwnedToken ownedToken;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "token")
     private Transaction transaction;
 
