@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -22,10 +23,20 @@ public class Transaction implements Serializable {
     @OneToOne(cascade = CascadeType.PERSIST)
     private Token token;
     private Double amount;
+    private LocalDateTime date;
 
-    public Transaction(Wallet wallet, Token token, Double amount) {
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
+
+    public Transaction(Wallet wallet, Token token, Double amount, TransactionType transactionType) {
         this.wallet = wallet;
         this.token = token;
         this.amount = amount;
+        this.transactionType = transactionType;
+    }
+
+    @PrePersist
+    private void onCreate(){
+        date = LocalDateTime.now();
     }
 }

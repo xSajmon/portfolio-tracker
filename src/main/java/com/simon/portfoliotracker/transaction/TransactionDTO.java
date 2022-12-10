@@ -8,4 +8,5 @@ public class TransactionDTO {
     private Long walletId;
     private String token;
     private Double amount;
+    private String type;
 }

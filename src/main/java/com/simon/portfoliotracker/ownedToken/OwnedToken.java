@@ -22,9 +22,12 @@ public class OwnedToken {
     private Token token;
     private Double amount;
 
-    public OwnedToken(Wallet wallet, Token token, Double amount) {
+    private Double price;
+
+    public OwnedToken(Wallet wallet, Token token, Double amount, Double price) {
         this.wallet = wallet;
         this.token = token;
         this.amount = amount;
+        this.price = price;
     }
 }

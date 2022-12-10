@@ -1,7 +1,6 @@
 package com.simon.portfoliotracker.transaction;
 
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +17,6 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<Transaction> addTransaction(@RequestBody TransactionDTO transactionDTO){
-        return new ResponseEntity<>(transactionService.addTransaction(transactionDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(transactionService.buyTransaction(transactionDTO), HttpStatus.CREATED);
     }
 }
