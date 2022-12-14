@@ -14,4 +14,8 @@ public class WalletService {
     public Wallet findWalletById(Long id){
        return walletRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Wallet with id " + id + "not found."));
     }
+
+    public Double getWalletBalance(Long id){
+        return findWalletById(id).getBalance();
+    }
 }
