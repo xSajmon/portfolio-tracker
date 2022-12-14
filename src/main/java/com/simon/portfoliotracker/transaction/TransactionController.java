@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,8 +20,9 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
+
     @PostMapping
-    public ResponseEntity<Object> addTransaction(@Valid @RequestBody TransactionDTO transactionDTO,
+    public ResponseEntity<Object> addTransaction(@Valid @RequestBody TransactionWrite transactionDTO,
                                                   BindingResult result){
         if(result.hasErrors()){
             Map<String, String> errors = result.getAllErrors().stream()
@@ -30,5 +30,10 @@ public class TransactionController {
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(transactionService.buyTransaction(transactionDTO), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TransactionRead>> getTransactions(){
+        return new ResponseEntity<>(transactionService.getTransactions(), HttpStatus.OK);
     }
 }

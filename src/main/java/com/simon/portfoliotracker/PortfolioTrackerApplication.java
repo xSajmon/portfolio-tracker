@@ -26,14 +26,14 @@ public class PortfolioTrackerApplication {
                                       TokenService tokenService,
                                       AppUserService userService){
         return args -> {
-            userRepository.save(new ApplicationUser("Szymon", "$2a$12$WXxGhMPgxFSerYq/bTnCd.ywLvW226kP6bhxDeLrApLTMwgHW7Czq", UserRole.ADMIN));
-            userRepository.save(new ApplicationUser("Iza", "$2a$12$WXxGhMPgxFSerYq/bTnCd.ywLvW226kP6bhxDeLrApLTMwgHW7Czq", UserRole.USER));
-
-            tokenService.fillDatabase();
+//            userRepository.save(new ApplicationUser("Szymon", "$2a$12$WXxGhMPgxFSerYq/bTnCd.ywLvW226kP6bhxDeLrApLTMwgHW7Czq", UserRole.ADMIN));
+//            userRepository.save(new ApplicationUser("Iza", "$2a$12$WXxGhMPgxFSerYq/bTnCd.ywLvW226kP6bhxDeLrApLTMwgHW7Czq", UserRole.USER));
+//
+//            tokenService.fillDatabase();
 //            tokenService.getRepoTokens().stream().forEach(System.out::println);
 //            System.out.println(tokenService.findByName("Bitcoin"));
 //            System.out.println(tokenService.getCurrentPrice(tokenService.findByName("Bitcoin")));
-            System.out.println(userService.getUserDto("Szymon"));
+//            System.out.println(userService.getUserDto("Szymon"));
         };
     }
 }

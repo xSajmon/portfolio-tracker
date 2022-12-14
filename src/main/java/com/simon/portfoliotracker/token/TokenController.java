@@ -1,5 +1,6 @@
 package com.simon.portfoliotracker.token;
 
+import lombok.AllArgsConstructor;
 import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,9 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
+@AllArgsConstructor
 public class TokenController {
     private final TokenService tokenService;
-
-    public TokenController(TokenService tokenService) {
-        this.tokenService = tokenService;
-    }
-
     @GetMapping("/tokens")
     public ResponseEntity<List<TokenDto>> getTokens(){
         List<TokenDto> tokenDtos = tokenService.getRepoTokens().stream()
