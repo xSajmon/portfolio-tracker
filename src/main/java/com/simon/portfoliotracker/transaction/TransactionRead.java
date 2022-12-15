@@ -14,5 +14,5 @@ public class TransactionRead extends TransactionWrite {
 
     private Long id;
     private String type;
-    private LocalDateTime date;
+    private String date;
 }

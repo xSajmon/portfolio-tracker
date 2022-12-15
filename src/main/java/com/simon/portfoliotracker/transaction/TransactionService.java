@@ -12,6 +12,8 @@ import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,7 +35,15 @@ public class TransactionService {
                 return generateFullTokenName(mappingContext.getSource().getName(), mappingContext.getSource().getSymbol());
             }
         };
+        Converter<LocalDateTime, String> date = new Converter<LocalDateTime, String>() {
+            @Override
+            public String convert(MappingContext<LocalDateTime, String> mappingContext) {
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
+                return mappingContext.getSource().format(format);
+            }
+        };
         mapper.addConverter(fullTokenName);
+        mapper.addConverter(date);
     }
 
     public Transaction buyTransaction(TransactionWrite transactionDto){
@@ -54,7 +64,7 @@ public class TransactionService {
 
     private String generateFullTokenName(String name, String symbol){
         if(!name.equals(symbol)){
-            return String.format("%s(%s)", name, symbol);
+            return String.format("%s (%s)", name, symbol);
         }
         return name;
     }
