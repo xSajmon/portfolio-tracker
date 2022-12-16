@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +22,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@EnableScheduling
 @AllArgsConstructor
 public class TransactionService {
 
@@ -26,6 +30,7 @@ public class TransactionService {
     private WalletService walletService;
     private TokenService tokenService;
     private ModelMapper mapper;
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @PostConstruct
     private void postConstruct(){
@@ -67,6 +72,12 @@ public class TransactionService {
             return String.format("%s (%s)", name, symbol);
         }
         return name;
+    }
+
+    @Scheduled(fixedRate = 5000)
+    public void sendTransactions(){
+        System.out.println("Sent.");
+        simpMessagingTemplate.convertAndSend("/topic/transactions", getTransactions());
     }
 
 }
