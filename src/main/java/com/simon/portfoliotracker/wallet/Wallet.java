@@ -35,6 +35,6 @@ public class Wallet {
     private List<Transaction> transactions;
 
     public Wallet() {
-        this.balance = 0d;
+        this.balance = 500d;
     }
 }

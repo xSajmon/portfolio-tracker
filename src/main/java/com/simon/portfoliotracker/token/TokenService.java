@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -79,5 +80,12 @@ public class TokenService {
 
     public List<String> getTokensByName() {
         return getRepoTokens().stream().map(Token::getName).collect(Collectors.toList());
+    }
+
+    public List<TokenDto> fetchCryptoPrices() {
+        return getRepoTokens().stream()
+                .parallel()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 }

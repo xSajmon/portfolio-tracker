@@ -15,4 +15,5 @@ public class TransactionRead extends TransactionWrite {
     private Long id;
     private String type;
     private String date;
+    private Double buyingPrice;
 }

@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@EnableScheduling
 @AllArgsConstructor
 public class TransactionService {
 
@@ -30,7 +29,6 @@ public class TransactionService {
     private WalletService walletService;
     private TokenService tokenService;
     private ModelMapper mapper;
-    private SimpMessagingTemplate simpMessagingTemplate;
 
     @PostConstruct
     private void postConstruct(){
@@ -55,7 +53,8 @@ public class TransactionService {
         Wallet wallet = walletService.findWalletById(transactionDto.getWalletId());
         Token token = tokenService.findByName(transactionDto.getToken());
         Double amount = transactionDto.getAmount();
-        Transaction transaction = new Transaction(wallet, token, amount, TransactionType.BUY);
+        Transaction transaction = new Transaction(wallet, token, amount, TransactionType.BUY, tokenService.getCurrentPrice(token));
+;
         wallet.setBalance(wallet.getBalance()- amount);
         wallet.getTokens().add(new OwnedToken(wallet, token, amount, tokenService.getCurrentPrice(token)));
         return transactionRepository.save(transaction);
@@ -74,10 +73,5 @@ public class TransactionService {
         return name;
     }
 
-    @Scheduled(fixedRate = 5000)
-    public void sendTransactions(){
-        System.out.println("Sent.");
-        simpMessagingTemplate.convertAndSend("/topic/transactions", getTransactions());
-    }
 
 }

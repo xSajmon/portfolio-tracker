@@ -23,16 +23,18 @@ public class Transaction implements Serializable {
     @OneToOne(cascade = CascadeType.PERSIST)
     private Token token;
     private Double amount;
+    private Double buyingPrice;
     private LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    public Transaction(Wallet wallet, Token token, Double amount, TransactionType transactionType) {
+    public Transaction(Wallet wallet, Token token, Double amount, TransactionType transactionType, Double buyingPrice) {
         this.wallet = wallet;
         this.token = token;
         this.amount = amount;
         this.transactionType = transactionType;
+        this.buyingPrice = buyingPrice;
     }
 
     @PrePersist
