@@ -5,30 +5,28 @@ import com.simon.portfoliotracker.token.Token;
 import com.simon.portfoliotracker.token.TokenService;
 import com.simon.portfoliotracker.wallet.Wallet;
 import com.simon.portfoliotracker.wallet.WalletService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TransactionService {
 
-    private TransactionRepository transactionRepository;
-    private WalletService walletService;
-    private TokenService tokenService;
-    private ModelMapper mapper;
+    private final TransactionRepository transactionRepository;
+    private final WalletService walletService;
+    private final TokenService tokenService;
+    private final ModelMapper mapper;
+    private final ApplicationEventPublisher publisher;
 
     @PostConstruct
     private void postConstruct(){
@@ -57,7 +55,9 @@ public class TransactionService {
 ;
         wallet.setBalance(wallet.getBalance()- amount);
         wallet.getTokens().add(new OwnedToken(wallet, token, amount, tokenService.getCurrentPrice(token)));
-        return transactionRepository.save(transaction);
+        Transaction save = transactionRepository.save(transaction);
+        publisher.publishEvent(new TransactionAddedEvent(getTransactions()));
+        return save;
     }
 
     public List<TransactionRead> getTransactions(){
