@@ -30,21 +30,22 @@ public class TransactionService {
 
     @PostConstruct
     private void postConstruct(){
-        Converter<Token, String> fullTokenName = new Converter<Token, String>() {
-            @Override
-            public String convert(MappingContext<Token, String> mappingContext) {
-                return generateFullTokenName(mappingContext.getSource().getName(), mappingContext.getSource().getSymbol());
-            }
+        Converter<Token, String> fullTokenName = mappingContext ->
+                generateFullTokenName(mappingContext.getSource().getName(), mappingContext.getSource().getSymbol());
+
+        Converter<LocalDateTime, String> date = mappingContext -> {
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
+            return mappingContext.getSource().format(format);
         };
-        Converter<LocalDateTime, String> date = new Converter<LocalDateTime, String>() {
-            @Override
-            public String convert(MappingContext<LocalDateTime, String> mappingContext) {
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
-                return mappingContext.getSource().format(format);
-            }
-        };
-        mapper.addConverter(fullTokenName);
-        mapper.addConverter(date);
+        mapper.typeMap(Token.class, String.class).setConverter(fullTokenName);
+        mapper.typeMap(LocalDateTime.class, String.class).setConverter(date);
+    }
+
+    private String generateFullTokenName(String name, String symbol){
+        if(!name.equals(symbol)){
+            return String.format("%s (%s)", name, symbol);
+        }
+        return name;
     }
 
     public Transaction buyTransaction(TransactionWrite transactionDto){
@@ -52,11 +53,8 @@ public class TransactionService {
         Token token = tokenService.findByName(transactionDto.getToken());
         Double amount = transactionDto.getAmount();
         Transaction transaction = new Transaction(wallet, token, amount, TransactionType.BUY, tokenService.getCurrentPrice(token));
-;
-        wallet.setBalance(wallet.getBalance()- amount);
-        wallet.getTokens().add(new OwnedToken(wallet, token, amount, tokenService.getCurrentPrice(token)));
         Transaction save = transactionRepository.save(transaction);
-        publisher.publishEvent(new TransactionAddedEvent(getTransactions()));
+        publisher.publishEvent(new TransactionAddedEvent(save, getTransactions()));
         return save;
     }
 
@@ -66,12 +64,7 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
-    private String generateFullTokenName(String name, String symbol){
-        if(!name.equals(symbol)){
-            return String.format("%s (%s)", name, symbol);
-        }
-        return name;
-    }
+
 
 
 }
