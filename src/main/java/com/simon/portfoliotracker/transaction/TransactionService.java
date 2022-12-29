@@ -33,22 +33,25 @@ public class TransactionService {
         Converter<Token, String> fullTokenName = mappingContext ->
                 generateFullTokenName(mappingContext.getSource().getName(), mappingContext.getSource().getSymbol());
 
-        Converter<LocalDateTime, String> date = mappingContext -> {
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
-            return mappingContext.getSource().format(format);
-        };
+        Converter<LocalDateTime, String> date = mappingContext -> formatDate(mappingContext.getSource());
         mapper.typeMap(Token.class, String.class).setConverter(fullTokenName);
         mapper.typeMap(LocalDateTime.class, String.class).setConverter(date);
     }
 
-    private String generateFullTokenName(String name, String symbol){
+    String generateFullTokenName(String name, String symbol){
         if(!name.equals(symbol)){
             return String.format("%s (%s)", name, symbol);
         }
         return name;
     }
 
+    private String formatDate(LocalDateTime date){
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
+        return date.format(format);
+    }
+
     public Transaction buyTransaction(TransactionWrite transactionDto){
+
         Wallet wallet = walletService.findWalletById(transactionDto.getWalletId());
         Token token = tokenService.findByName(transactionDto.getToken());
         Double amount = transactionDto.getAmount();

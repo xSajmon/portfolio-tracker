@@ -3,7 +3,7 @@ package com.simon.portfoliotracker.transaction;
 import com.simon.portfoliotracker.WebSocketBrokerService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
