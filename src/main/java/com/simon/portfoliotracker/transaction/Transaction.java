@@ -4,6 +4,7 @@ import com.simon.portfoliotracker.token.Token;
 import com.simon.portfoliotracker.wallet.Wallet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,16 +30,55 @@ public class Transaction implements Serializable {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    public Transaction(Wallet wallet, Token token, Double amount, TransactionType transactionType, Double buyingPrice) {
-        this.wallet = wallet;
-        this.token = token;
-        this.amount = amount;
-        this.transactionType = transactionType;
-        this.buyingPrice = buyingPrice;
-    }
-
     @PrePersist
     private void onCreate(){
         date = LocalDateTime.now();
     }
+
+
+    public static Builder Builder(){
+        return new Builder();
+    }
+
+    public static final class Builder{
+        private Wallet wallet;
+        private Token token;
+        private Double amount;
+        private Double buyingPrice;
+        private TransactionType transactionType;
+
+        Builder wallet(Wallet wallet){
+            this.wallet = wallet;
+            return this;
+        }
+        Builder token(Token token){
+            this.token = token;
+            return this;
+        }
+        Builder amount(Double amount) {
+            this.amount = amount;
+            return this;
+        }
+        Builder buyingPrice(Double buyingPrice){
+            this.buyingPrice = buyingPrice;
+            return this;
+        }
+
+        Builder transactionType(TransactionType transactionType){
+            this.transactionType = transactionType;
+            return this;
+        }
+
+        public Transaction build(){
+            Transaction transaction = new Transaction();
+            transaction.wallet = this.wallet;
+            transaction.token = this.token;
+            transaction.amount = this.amount;
+            transaction.buyingPrice = this.buyingPrice;
+            transaction.transactionType = this.transactionType;
+            return transaction;
+        }
+    }
+
+
 }

@@ -52,10 +52,14 @@ public class TransactionService {
 
     public Transaction buyTransaction(TransactionWrite transactionDto){
 
-        Wallet wallet = walletService.findWalletById(transactionDto.getWalletId());
-        Token token = tokenService.findByName(transactionDto.getToken());
-        Double amount = transactionDto.getAmount();
-        Transaction transaction = new Transaction(wallet, token, amount, TransactionType.BUY, tokenService.getCurrentPrice(token));
+        Transaction transaction = Transaction.Builder()
+                .wallet(walletService.findWalletById(transactionDto.getWalletId()))
+                .token(tokenService.findByName(transactionDto.getToken()))
+                .amount(transactionDto.getAmount())
+                .buyingPrice(tokenService.getCurrentPrice(tokenService.findByName(transactionDto.getToken())))
+                .transactionType(TransactionType.BUY)
+                .build();
+
         Transaction save = transactionRepository.save(transaction);
         publisher.publishEvent(new TransactionAddedEvent(save, getTransactions()));
         return save;

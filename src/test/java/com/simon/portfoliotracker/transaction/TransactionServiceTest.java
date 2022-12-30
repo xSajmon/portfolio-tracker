@@ -120,7 +120,12 @@ class TransactionServiceTest {
 
         //when
         Transaction actualTransaction = transactionService.buyTransaction(transactionWrite);
-        Transaction expectedTransaction = new Transaction(wallet, token, 100d, TransactionType.BUY, 20000d);
+        Transaction expectedTransaction = Transaction.Builder()
+                .wallet(wallet)
+                .token(token)
+                .transactionType(TransactionType.BUY)
+                .amount(100d)
+                .buyingPrice(20000d).build();
 
         //then
         assertEquals(expectedTransaction, actualTransaction);
