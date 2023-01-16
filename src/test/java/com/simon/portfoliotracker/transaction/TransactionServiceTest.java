@@ -4,6 +4,7 @@ import com.simon.portfoliotracker.token.Token;
 import com.simon.portfoliotracker.token.TokenService;
 import com.simon.portfoliotracker.wallet.Wallet;
 import com.simon.portfoliotracker.wallet.WalletService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
@@ -30,41 +32,11 @@ class TransactionServiceTest {
     @Mock
     private TokenService tokenService;
     @Mock
-    private ModelMapper mapper;
-    @Mock
     private ApplicationEventPublisher publisher;
-
+    @Mock
+    private TransactionMapper mapper;
     @InjectMocks
     private TransactionService transactionService;
-
-
-    @Test
-    public void Should_FormatTokenName_When_TokenNameAndTokenSymbolAreDifferent(){
-        // given
-        String name = "Bitcoin";
-        String symbol = "BTC";
-
-        // when
-        String actualResult = transactionService.generateFullTokenName(name, symbol);
-        String expectedResult = "Bitcoin (BTC)";
-
-        // then
-        assertEquals(expectedResult, actualResult);
-    }
-
-    @Test
-    public void Should_ReturnTokenName_When_TokenNameAndTokenSymbolAreEqual(){
-        //given
-        String name = "Bitcoin";
-        String symbol = "Bitcoin";
-
-        //when
-        String actualResult = transactionService.generateFullTokenName(name, symbol);
-        String expectedResult = "Bitcoin";
-
-        //then
-        assertEquals(expectedResult, actualResult);
-    }
 
     @Test
     public void Should_ThrowNoSuchElementException_When_WalletWithGivenIdDoesNotExists(){
@@ -117,6 +89,7 @@ class TransactionServiceTest {
         given(tokenService.findByName(anyString())).willReturn(token);
         given(tokenService.getCurrentPrice(any(Token.class))).willReturn(20000d);
         given(transactionRepository.save(any(Transaction.class))).willAnswer(i -> i.getArguments()[0]);
+        given(mapper.mapToDtos(anyList())).willReturn(anyList());
 
         //when
         Transaction actualTransaction = transactionService.buyTransaction(transactionWrite);
