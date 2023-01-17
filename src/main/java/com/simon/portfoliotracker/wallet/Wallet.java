@@ -26,7 +26,7 @@ public class Wallet {
     @JsonIgnore
     private ApplicationUser user;
 
-    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "wallet", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     private List<OwnedToken> tokens;
 

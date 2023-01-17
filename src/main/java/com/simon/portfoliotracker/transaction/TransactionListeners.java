@@ -18,4 +18,9 @@ public class TransactionListeners {
         walletService.updateWallet(event.getTransaction());
         socketService.sendTransactions(event.getTransactions());
     }
+
+    @EventListener
+    public void onTransactionDeletedListener(TransactionDeletedEvent event){
+        socketService.sendTransactions(event.getTransactions());
+    }
 }

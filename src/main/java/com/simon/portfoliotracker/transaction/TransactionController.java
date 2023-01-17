@@ -25,7 +25,10 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
-
+    @GetMapping
+    public ResponseEntity<List<TransactionRead>> getTransactions(){
+        return new ResponseEntity<>(transactionService.getTransactions(), HttpStatus.OK);
+    }
     @PostMapping
     public ResponseEntity<Object> addTransaction(@Valid @RequestBody TransactionWrite transactionDTO,
                                                   BindingResult result){
@@ -37,8 +40,14 @@ public class TransactionController {
         return new ResponseEntity<>(transactionService.buyTransaction(transactionDTO), HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<TransactionRead>> getTransactions(){
-        return new ResponseEntity<>(transactionService.getTransactions(), HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTransaction(@PathVariable Long id){
+        try{
+            transactionService.sellTransaction(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
+
 }

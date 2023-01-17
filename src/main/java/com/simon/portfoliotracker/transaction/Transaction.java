@@ -46,6 +46,7 @@ public class Transaction implements Serializable {
         private Double amount;
         private Double buyingPrice;
         private TransactionType transactionType;
+        private LocalDateTime transactionDate;
 
         Builder wallet(Wallet wallet){
             this.wallet = wallet;
@@ -63,9 +64,13 @@ public class Transaction implements Serializable {
             this.buyingPrice = buyingPrice;
             return this;
         }
-
         Builder transactionType(TransactionType transactionType){
             this.transactionType = transactionType;
+            return this;
+        }
+
+        Builder transactionDate(LocalDateTime date){
+            this.transactionDate = date;
             return this;
         }
 
@@ -76,6 +81,7 @@ public class Transaction implements Serializable {
             transaction.amount = this.amount;
             transaction.buyingPrice = this.buyingPrice;
             transaction.transactionType = this.transactionType;
+            transaction.date = this.transactionDate;
             return transaction;
         }
     }

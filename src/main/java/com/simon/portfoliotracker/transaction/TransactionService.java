@@ -3,10 +3,13 @@ package com.simon.portfoliotracker.transaction;
 import com.simon.portfoliotracker.token.TokenService;
 import com.simon.portfoliotracker.wallet.WalletService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +21,14 @@ public class TransactionService {
     private final TransactionMapper mapper;
     private final ApplicationEventPublisher publisher;
 
+    public List<TransactionRead> getTransactions(){
+        return mapper.mapToDtos(transactionRepository.findAll());
+    }
 
+    public Transaction getTransactionById(Long id){
+        return transactionRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Transaction with id " + id + " not found"));
+    }
 
     public Transaction buyTransaction(TransactionWrite transactionDto){
 
@@ -35,9 +45,13 @@ public class TransactionService {
         return save;
     }
 
-    public List<TransactionRead> getTransactions(){
-        return mapper.mapToDtos(transactionRepository.findAll());
+    public void sellTransaction(Long id){
+        Transaction transaction = getTransactionById(id);
+        transactionRepository.delete(transaction);
+        publisher.publishEvent(new TransactionDeletedEvent(transaction, getTransactions()));
     }
+
+
 
 
 
