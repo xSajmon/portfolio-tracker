@@ -47,6 +47,7 @@ public class TransactionService {
 
     public void sellTransaction(Long id){
         Transaction transaction = getTransactionById(id);
+        transaction.setTransactionType(TransactionType.SELL);
         transactionRepository.delete(transaction);
         publisher.publishEvent(new TransactionDeletedEvent(transaction, getTransactions()));
     }

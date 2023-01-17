@@ -4,8 +4,9 @@ import lombok.Data;
 
 import java.util.List;
 
-@Data
-public class TransactionDeletedEvent {
-    private final Transaction transaction;
-    private final List<TransactionRead> transactions;
+
+public class TransactionDeletedEvent extends TransactionEvent {
+    public TransactionDeletedEvent(Transaction transaction, List<TransactionRead> transactions) {
+        super(transaction, transactions);
+    }
 }
