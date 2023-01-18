@@ -24,22 +24,23 @@ class TransactionMapperTest {
         TransactionRead transactionRead = transactionMapper.mapToDto(transaction);
 
         //then
-        assertEquals(transactionRead.getType(), "BUY");
+        assertEquals(transactionRead.getType(), "ACTIVE");
         assertEquals(transactionRead.getBuyingPrice(), 1000);
         assertEquals(transactionRead.getAmount(), 200);
         assertEquals(transactionRead.getToken(), "Bitcoin(BTC)");
-        assertEquals(transactionRead.getDate(), "14-10-99 00:00");
+        assertEquals(transactionRead.getStartDate(), "14-10-99 00:00");
 
 
     }
     private Transaction buildTestTransaction(){
-        return Transaction.Builder()
+        return Transaction.builder()
                 .wallet(new Wallet())
                 .buyingPrice(1000d)
                 .amount(200d)
-                .transactionType(TransactionType.BUY)
+                .transactionType(TransactionType.ACTIVE)
                 .token(new Token("Bitcoin", "BTC"))
-                .transactionDate(LocalDateTime.of(1999, Month.OCTOBER, 14, 0, 0))
+                .startDate(LocalDateTime.of(1999, Month.OCTOBER, 14, 0, 0))
+                .endDate(null)
                 .build();
     }
 }

@@ -16,4 +16,6 @@ public class TransactionWrite {
     private String token;
     @Positive(message = "Incorrect amount.")
     private Double amount;
+    private Double buyingPrice;
+    private Double sellingPrice;
 }

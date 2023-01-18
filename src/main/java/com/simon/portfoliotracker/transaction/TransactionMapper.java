@@ -18,7 +18,7 @@ public class TransactionMapper extends AbstractMapper<Transaction, TransactionRe
         this.mapper = mapper;
         TypeMap<Transaction, TransactionRead> typeMap = mapper.createTypeMap(Transaction.class, TransactionRead.class);
         typeMap.addMappings(typeMapper -> typeMapper.using(createTokenNameConverter()).map(Transaction::getToken, TransactionRead::setToken));
-        typeMap.addMappings(typeMapper -> typeMapper.using(createDateConverter()).map(Transaction::getDate, TransactionRead::setDate));
+        typeMap.addMappings(typeMapper -> typeMapper.using(createDateConverter()).map(Transaction::getStartDate, TransactionRead::setStartDate));
     }
     @Override
     public TransactionRead mapToDto(Transaction entity) {

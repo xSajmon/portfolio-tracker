@@ -4,19 +4,16 @@ import com.simon.portfoliotracker.token.Token;
 import com.simon.portfoliotracker.token.TokenService;
 import com.simon.portfoliotracker.wallet.Wallet;
 import com.simon.portfoliotracker.wallet.WalletService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
@@ -93,10 +90,10 @@ class TransactionServiceTest {
 
         //when
         Transaction actualTransaction = transactionService.buyTransaction(transactionWrite);
-        Transaction expectedTransaction = Transaction.Builder()
+        Transaction expectedTransaction = Transaction.builder()
                 .wallet(wallet)
                 .token(token)
-                .transactionType(TransactionType.BUY)
+                .transactionType(TransactionType.ACTIVE)
                 .amount(100d)
                 .buyingPrice(20000d).build();
 

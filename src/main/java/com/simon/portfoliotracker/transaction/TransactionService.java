@@ -3,13 +3,11 @@ package com.simon.portfoliotracker.transaction;
 import com.simon.portfoliotracker.token.TokenService;
 import com.simon.portfoliotracker.wallet.WalletService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,12 +30,12 @@ public class TransactionService {
 
     public Transaction buyTransaction(TransactionWrite transactionDto){
 
-        Transaction transaction = Transaction.Builder()
+        Transaction transaction = Transaction.builder()
                 .wallet(walletService.findWalletById(transactionDto.getWalletId()))
                 .token(tokenService.findByName(transactionDto.getToken()))
                 .amount(transactionDto.getAmount())
                 .buyingPrice(tokenService.getCurrentPrice(tokenService.findByName(transactionDto.getToken())))
-                .transactionType(TransactionType.BUY)
+                .transactionType(TransactionType.ACTIVE)
                 .build();
 
         Transaction save = transactionRepository.save(transaction);
@@ -47,7 +45,7 @@ public class TransactionService {
 
     public void sellTransaction(Long id){
         Transaction transaction = getTransactionById(id);
-        transaction.setTransactionType(TransactionType.SELL);
+        transaction.setTransactionType(TransactionType.DELETED);
         transactionRepository.delete(transaction);
         publisher.publishEvent(new TransactionDeletedEvent(transaction, getTransactions()));
     }
