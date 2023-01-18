@@ -15,6 +15,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,8 +38,8 @@ public class Token {
     private OwnedToken ownedToken;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "token")
-    private Transaction transaction;
+    @OneToMany(mappedBy = "token")
+    private List<Transaction> transaction;
 
 
     @JsonProperty("priceUsd")

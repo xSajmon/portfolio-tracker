@@ -21,7 +21,7 @@ public class Transaction implements Serializable {
 
     @ManyToOne
     private Wallet wallet;
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Token token;
     private Double amount;
     private Double buyingPrice;

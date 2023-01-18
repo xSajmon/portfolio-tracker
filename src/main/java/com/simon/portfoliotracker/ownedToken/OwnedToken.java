@@ -23,11 +23,13 @@ public class OwnedToken {
     private Double amount;
 
     private Double price;
+    private Long transactionCount;
 
     public OwnedToken(Wallet wallet, Token token, Double amount, Double price) {
         this.wallet = wallet;
         this.token = token;
         this.amount = amount;
         this.price = price;
+        this.transactionCount = 1L;
     }
 }
