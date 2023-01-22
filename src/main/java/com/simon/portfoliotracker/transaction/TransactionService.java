@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -43,7 +44,7 @@ public class TransactionService {
         return save;
     }
 
-    public void sellTransaction(Long id){
+    public void deleteTransaction(Long id){
         Transaction transaction = getTransactionById(id);
         transaction.setTransactionType(TransactionType.DELETED);
         transactionRepository.delete(transaction);
@@ -51,8 +52,13 @@ public class TransactionService {
     }
 
 
-
-
-
-
+    public TransactionRead sellTransaction(Long id, Double sellingPrice) {
+        Transaction transaction = getTransactionById(id);
+        transaction.setTransactionType(TransactionType.COMPLETED);
+        transaction.setSellingPrice(sellingPrice);
+        transaction.setEndDate(LocalDateTime.now());
+        transactionRepository.save(transaction);
+        publisher.publishEvent(new TransactionCompletedEvent(transaction, getTransactions()));
+        return mapper.mapToDto(transaction);
+    }
 }

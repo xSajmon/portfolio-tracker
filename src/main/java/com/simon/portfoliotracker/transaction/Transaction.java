@@ -38,4 +38,7 @@ public class Transaction implements Serializable {
         startDate = LocalDateTime.now();
     }
 
+    public Double getProfit() {
+        return amount * sellingPrice - amount * buyingPrice;
+    }
 }

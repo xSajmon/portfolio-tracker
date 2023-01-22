@@ -38,6 +38,11 @@ public class WalletService {
                 ownedTokenService.updateOwnedTokenAfterTransactionDeletion(wallet, transaction.getToken(), transaction.getAmount());
                 break;
             }
+            case COMPLETED: {
+                wallet.setBalance(wallet.getBalance() + transaction.getAmount() + transaction.getProfit());
+                ownedTokenService.updateOwnedTokenAfterTransactionDeletion(wallet, transaction.getToken(), transaction.getAmount());
+                break;
+            }
         }
         walletRepository.save(wallet);
     }

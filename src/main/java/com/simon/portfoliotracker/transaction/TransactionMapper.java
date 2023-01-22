@@ -2,13 +2,12 @@ package com.simon.portfoliotracker.transaction;
 
 import com.simon.portfoliotracker.base.AbstractMapper;
 import com.simon.portfoliotracker.token.Token;
-import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
+import org.modelmapper.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 @Component
 public class TransactionMapper extends AbstractMapper<Transaction, TransactionRead> {
@@ -16,9 +15,10 @@ public class TransactionMapper extends AbstractMapper<Transaction, TransactionRe
 
     public TransactionMapper(ModelMapper mapper) {
         this.mapper = mapper;
+        mapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+        mapper.typeMap(LocalDateTime.class, String.class).setConverter(createDateConverter());
         TypeMap<Transaction, TransactionRead> typeMap = mapper.createTypeMap(Transaction.class, TransactionRead.class);
         typeMap.addMappings(typeMapper -> typeMapper.using(createTokenNameConverter()).map(Transaction::getToken, TransactionRead::setToken));
-        typeMap.addMappings(typeMapper -> typeMapper.using(createDateConverter()).map(Transaction::getStartDate, TransactionRead::setStartDate));
     }
     @Override
     public TransactionRead mapToDto(Transaction entity) {

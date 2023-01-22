@@ -1,16 +1,12 @@
 package com.simon.portfoliotracker.transaction;
 
-import com.simon.portfoliotracker.WebSocketBrokerService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -42,12 +38,17 @@ public class TransactionController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTransaction(@PathVariable Long id){
-        try{
-            transactionService.sellTransaction(id);
+        try {
+            transactionService.deleteTransaction(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> markAsCompleted(@PathVariable Long id, @RequestBody Double sellingPrice){
+            return new ResponseEntity<>(transactionService.sellTransaction(id, sellingPrice), HttpStatus.OK);
     }
 
 }

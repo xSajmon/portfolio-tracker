@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @JsonPropertyOrder({"id"})
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionRead extends TransactionWrite {
 
 
