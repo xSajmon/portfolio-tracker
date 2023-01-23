@@ -1,31 +1,30 @@
 package com.simon.portfoliotracker;
 
-import com.simon.portfoliotracker.token.TokenService;
-import com.simon.portfoliotracker.transaction.Transaction;
+import com.simon.portfoliotracker.token.Observer;
+import com.simon.portfoliotracker.token.TokenDto;
 import com.simon.portfoliotracker.transaction.TransactionRead;
-import com.simon.portfoliotracker.transaction.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@EnableScheduling
 @RequiredArgsConstructor
-public class WebSocketBrokerService {
+public class WebSocketBrokerService implements Observer {
 
-    private final TokenService tokenService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public void sendTransactions(List<TransactionRead> transactions){
         simpMessagingTemplate.convertAndSend("/topic/transactions", transactions);
     }
-    @Scheduled(fixedRate = 5000)
-    public void publishPrices(){
-        System.out.println(tokenService.fetchCryptoPrices().stream().findFirst());
-        simpMessagingTemplate.convertAndSend("/topic/crypto-price", tokenService.fetchCryptoPrices());
+    public void publishPrices(List<TokenDto> tokens){
+        simpMessagingTemplate.convertAndSend("/topic/crypto-price", tokens);
+    }
+    @Override
+    public void update(List<TokenDto> tokens) {
+        System.out.println(tokens.size());
+        System.out.println(tokens);
+        publishPrices(tokens);
     }
 }
